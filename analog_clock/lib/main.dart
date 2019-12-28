@@ -11,7 +11,10 @@ import 'package:flutter/material.dart';
 
 import 'analog_clock.dart';
 
+import 'circle_progress_bar.dart';
+
 void main() {
+
   // A temporary measure until Platform supports web and TargetPlatform supports
   // macOS.
   if (!kIsWeb && Platform.isMacOS) {
@@ -32,3 +35,5 @@ void main() {
   // widget. (Look in analog_clock.dart for more details!)
   runApp(ClockCustomizer((ClockModel model) => AnalogClock(model)));
 }
+
+

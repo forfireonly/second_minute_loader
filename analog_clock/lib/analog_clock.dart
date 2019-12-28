@@ -13,12 +13,20 @@ import 'package:vector_math/vector_math_64.dart' show radians;
 import 'container_hand.dart';
 import 'drawn_hand.dart';
 
+import 'circle_progress_bar.dart';
+
+import 'circle_progress_bar_second.dart';
+
 /// Total distance traveled by a second or a minute hand, each second or minute,
 /// respectively.
 final radiansPerTick = radians(360 / 60);
 
 /// Total distance traveled by an hour hand, each hour, in radians.
 final radiansPerHour = radians(360 / 12);
+
+//Collars for the face of the clock
+Color colorOne = Colors.lime;
+Color colorTwo = Colors.green;
 
 /// A basic analog clock.
 ///
@@ -98,12 +106,12 @@ class _AnalogClockState extends State<AnalogClock> {
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.
-            primaryColor: Color(0xFF4285F4),
+            primaryColor: Color(0xffeb9191),
             // Minute hand.
-            highlightColor: Color(0xFF8AB4F8),
+            highlightColor: Color(0xffeb9191),
             // Second hand.
-            accentColor: Color(0xFF669DF6),
-            backgroundColor: Color(0xFFD2E3FC),
+            accentColor: Color(0xfffad7c0),
+            backgroundColor: Color(0xff90e3da),
           )
         : Theme.of(context).copyWith(
             primaryColor: Color(0xFFD2E3FC),
@@ -139,13 +147,13 @@ class _AnalogClockState extends State<AnalogClock> {
             DrawnHand(
               color: customTheme.accentColor,
               thickness: 4,
-              size: 1,
+              size: 0.95,
               angleRadians: _now.second * radiansPerTick,
             ),
             DrawnHand(
               color: customTheme.highlightColor,
-              thickness: 16,
-              size: 0.9,
+              thickness: 10, //16,
+              size: 0.85,
               angleRadians: _now.minute * radiansPerTick,
             ),
             // Example of a hand drawn with [Container].
@@ -173,9 +181,121 @@ class _AnalogClockState extends State<AnalogClock> {
                 child: weatherInfo,
               ),
             ),
+            Positioned.fill(
+              // child: //CircularProgressIndicator(),
+
+              child: Align(alignment: Alignment.center, child: ProgressCard()),
+            ),
+
+            Positioned.fill(
+              // child: //CircularProgressIndicator(),
+
+              child: Align(alignment: Alignment.center, child: ProgressCard2()),
+            )
           ],
         ),
       ),
     );
+  }
+}
+
+//Loading bar for minutes
+class ProgressCard extends StatefulWidget {
+  @override
+  _ProgressCardState createState() => _ProgressCardState();
+}
+
+class _ProgressCardState extends State<ProgressCard> {
+  double progressPercent = 0;
+  var _now = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _timer();
+    _now = DateTime.now();
+    progressPercent = _now.minute * radiansPerTick;
+  }
+
+  void _timer() {
+    Future.delayed(Duration(minutes: 1)).then((_) {
+      setState(() {
+        _now = DateTime.now();
+        progressPercent = _now.minute * radiansPerTick;
+      });
+      _timer();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Color foreground = Color(0xffeb9191); //(0xFF4285F4);
+    _timer();
+    Color background;
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: CircleProgressBar2(
+                backgroundColor: background,
+                foregroundColor: foreground,
+                value: progressPercent, //this.progressPercent,
+              ),
+            ),
+          ),
+        ]);
+  }
+}
+
+//Loading bar for seconds
+
+class ProgressCard2 extends StatefulWidget {
+  @override
+  _ProgressCardState2 createState() => _ProgressCardState2();
+}
+
+class _ProgressCardState2 extends State<ProgressCard2> {
+  double progressPercent = 0;
+  var _now = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _timer2();
+    progressPercent = _now.second * radiansPerTick;
+  }
+
+  void _timer2() {
+    Future.delayed(Duration(minutes: 1)).then((_) {
+      setState(() {
+        _now = DateTime.now();
+        progressPercent = _now.second * radiansPerTick;
+      });
+      _timer2();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Color foreground = Color(0xfffad7c0);
+    _timer2();
+    Color background;
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: CircleProgressBar(
+                backgroundColor: background,
+                foregroundColor: foreground,
+                value: progressPercent, //this.progressPercent,
+              ),
+            ),
+          ),
+        ]);
   }
 }
