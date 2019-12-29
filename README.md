@@ -13,3 +13,7 @@ Example [Analog Clock](analog_clock)
 Example [Digital Clock](digital_clock)
 
 <img src='digital_clock/digital.gif' width='350'>
+
+Second Minute Loader
+
+![Screen Recording 2019-12-29 at 9 11 20 PM (1)](https://user-images.githubusercontent.com/29640816/71561206-872acc00-2a84-11ea-8a92-96c1cc8b7d2b.jpeg)
