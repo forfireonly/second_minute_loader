@@ -269,7 +269,7 @@ class _ProgressCardState2 extends State<ProgressCard2> {
   }
 
   void _timer2() {
-    Future.delayed(Duration(minutes: 1)).then((_) {
+    Future.delayed(Duration(seconds: 1)).then((_) {
       setState(() {
         _now = DateTime.now();
         progressPercent = _now.second * radiansPerTick;
